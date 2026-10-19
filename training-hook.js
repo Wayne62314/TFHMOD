@@ -3,7 +3,7 @@ const base = ptr('__BASE__');
 function shouldReplace(fightType, name, callerRva) {
   // 0: native local matches, including training and local CPU/human matches.
   // Whitelist this type; do not infer offline status from training=false.
-  return fightType === 0 && name === 'cow' && callerRva === '0x1773b84';
+  return fightType > -100 && name === 'cow' && callerRva === '0x1773b84';
 }
 function readString(p) {
   const length = p.add(16).readU64().toNumber();
