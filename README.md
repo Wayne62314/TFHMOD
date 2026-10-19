@@ -32,11 +32,36 @@ SHA256: 03E20EECE23F39FB1012061A5A7FF92F4B63DA23EB8EB641CF6EE379CBCE373D
 
 ## 首次安装
 
-1. 在仓库页面选择 **Code → Download ZIP**，完整解压到自己有写入权限的目录；也可 `git clone`。
+1. 在仓库页面选择 **Code → Download ZIP**，右键下载的 ZIP → **全部解压**；也可 `git clone`。工具应放在独立文件夹，位置说明见下方。
 2. 安装上述 64 位 Python。
 3. 双击 `Setup.cmd`，等待显示 `Setup complete`。
 
 安装脚本只在此工具目录创建 `.venv`，安装 `requirements.txt` 中固定的 `frida==17.24.3`，不修改系统 Python 环境。不包含游戏资源或第三方依赖二进制。
+
+### 应该解压到哪里？
+
+**不需要放进游戏目录，也不需要放在与游戏相同的盘。** 它是独立运行的小工具，会自动寻找正在运行的游戏；无需向游戏目录、`data01` 或任何 Mod 文件夹复制文件。
+
+例如，你可以先在 D 盘新建 `TFHMOD` 文件夹，把 ZIP 完整解压进去。GitHub 下载的压缩包通常包含一层 `TFHMOD-main`，最终可能是：
+
+```text
+D:\TFHMOD\TFHMOD-main\
+    README.md
+    Setup.cmd
+    Start-Huggles.cmd
+    runner.py
+    training-hook.js
+    requirements.txt
+    ……其他配套文件
+```
+
+这只是示例，不要求你有 D 盘；也可以放在自己“文档”中的独立文件夹。**以能同时看到 `Setup.cmd`、`Start-Huggles.cmd` 和 `runner.py` 的那一层为工具目录**，在里面先运行 `Setup.cmd`，以后从同一位置运行 `Start-Huggles.cmd`。
+
+注意：
+
+- 不要直接在 ZIP 压缩包里双击运行，也不要只拖出两个 `.cmd` 文件；应保留全部配套文件和目录结构。
+- 选择普通用户有写入权限、可以长期保留的目录，避免系统目录、`Program Files` 或临时解压目录。安装和运行会在工具目录写入 `.venv` 与 `logs`。
+- 安装依赖后不要随意移动整个工具目录，`.venv` 中可能包含原位置记录。如需换位置，在新位置重新解压、重新运行 `Setup.cmd`。
 
 如 Python 未添加到 PATH，可以在工具目录的 PowerShell 中明确指定解释器：
 
