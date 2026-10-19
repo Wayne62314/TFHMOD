@@ -3,21 +3,23 @@ import argparse
 import json
 import msvcrt
 import os
+import sys
 from pathlib import Path
 import tempfile
 import threading
 
 
-def main():
+def main(argv=None):
     import frida
 
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('pid', type=int)
     parser.add_argument('base', type=lambda value: int(value, 0))
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
     if args.pid <= 0 or args.base <= 0:
         parser.error('PID and module base must be positive')
-    root = Path(__file__).resolve().parent
+    root = Path(sys.executable).resolve().parent if getattr(sys, 'frozen', False) else Path(__file__).resolve().parent
+    resource_root = Path(getattr(sys, '_MEIPASS', root))
     # Per-game-process lock shared by multiple copies of this published tool.
     lock_path = Path(tempfile.gettempdir()) / f'tfhmod-huggles-{args.pid}.lock'
     with lock_path.open('a+b') as lock:
@@ -48,7 +50,7 @@ def main():
             event = payload.get('event')
             if event == 'ready':
                 ready.set()
-                print('Ready (v2). LOCAL training / versus / CPU: choose Arizona as Player 1.', flush=True)
+                print('Ready (v2.1.0). LOCAL training / versus / CPU: choose Arizona as Player 1.', flush=True)
                 print('Keep this window open. Do not use online. Ctrl+C stops the helper.', flush=True)
             elif event == 'replaced':
                 print('Player 1: Arizona -> Huggles; opponent unchanged.', flush=True)
@@ -58,7 +60,7 @@ def main():
         try:
             session = frida.attach(args.pid)
             session.on('detached', lambda *unused: done.set())
-            source = (root / 'training-hook.js').read_text(encoding='utf-8')
+            source = (resource_root / 'training-hook.js').read_text(encoding='utf-8')
             script = session.create_script(source.replace('__BASE__', hex(args.base)))
             script.on('message', message)
             script.load()

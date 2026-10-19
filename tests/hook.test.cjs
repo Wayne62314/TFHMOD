@@ -58,8 +58,13 @@ for(const training of [0,1]) test(`local match replaces only P1 (training=${trai
   assert.equal(h.p1,'bscout');assert.equal(h.p2,'velvet');assert.equal(h.palette,0);
   assert.equal(h.writes.length,2);assert.equal(h.messages.at(-1).event,'replaced');
 });
-test('all nonlocal types are skipped, including network 1/11 even with training flag',()=>{
+test('training type 10 requires the training flag',()=>{
+  const h=harness({fightType:10,training:1});h.start();h.load();
+  assert.equal(h.p1,'bscout');assert.equal(h.p2,'velvet');assert.equal(h.palette,0);
+});
+test('other types are skipped, including network 1/11 even with training flag',()=>{
   for(let fightType=1;fightType<=16;fightType++) for(const training of [0,1]){
+    if(fightType===10&&training===1) continue;
     const h=harness({fightType,training});h.start();h.load();
     assert.equal(h.p1,'cow');assert.equal(h.p2,'velvet');assert.equal(h.writes.length,0);
   }

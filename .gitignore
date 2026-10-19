@@ -13,3 +13,7 @@ dependencies/
 *.dll
 *.pyd
 .env
+build/
+dist/
+*.spec
+release/

@@ -59,7 +59,7 @@ class SessionTests(unittest.TestCase):
         fake = types.SimpleNamespace(attach=lambda pid:session, InvalidOperationError=RuntimeError)
         code, output = self.invoke(fake)
         self.assertEqual(code, 0)
-        self.assertIn('Ready (v2)', output)
+        self.assertIn('Ready (v2.1.0)', output)
         self.assertTrue(session.detached)
         self.assertEqual(session.source, 'mock 0x10000000')
 

@@ -1,9 +1,9 @@
 'use strict';
 const base = ptr('__BASE__');
-function shouldReplace(fightType, name, callerRva) {
-  // 0: native local matches, including training and local CPU/human matches.
-  // Whitelist this type; do not infer offline status from training=false.
-  return fightType > -100 && name === 'cow' && callerRva === '0x1773b84';
+function shouldReplace(fightType, training, name, callerRva) {
+  // 0: local versus/CPU; 10 with training=1: observed native training flow.
+  const offline = fightType === 0 || (fightType === 10 && training === 1);
+  return offline && name === 'cow' && callerRva === '0x1773b84';
 }
 function readString(p) {
   const length = p.add(16).readU64().toNumber();
@@ -33,7 +33,7 @@ Interceptor.attach(base.add(0x1772f40), {
       const opponent = readString(scene.add(0x2130));
       send({event:'loading', fightType, training, player1:before, player2:opponent,
             caller:this.returnAddress.sub(base).toString()});
-      if (!shouldReplace(fightType, before, this.returnAddress.sub(base).toString())) return;
+      if (!shouldReplace(fightType, training, before, this.returnAddress.sub(base).toString())) return;
       assign(p1, bear, 6);
       // Only palette 0 is known to exist for this boss.
       scene.add(0x2368).writeS32(0);
@@ -41,4 +41,4 @@ Interceptor.attach(base.add(0x1772f40), {
     } catch (e) { send({event:'error', message:String(e)}); }
   }
 });
-send({event:'ready', version:2, scope:'local training / human / CPU matches; P1 cow -> bscout; memory only'});
+send({event:'ready', version:'2.1.0', scope:'local training / human / CPU matches; P1 cow -> bscout; memory only'});

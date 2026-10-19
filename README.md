@@ -1,5 +1,17 @@
 # TFHMOD · Huggles 大熊本地可玩工具
 
+## 免安装分享版：推荐普通玩家使用
+
+到 [GitHub Releases](https://github.com/Wayne62314/TFHMOD/releases/latest) 的 **Assets** 下载 **`TFHMOD-v2.1.0-windows-x64.zip`**，完整解压到独立、可写的文件夹，例如 `D:\TFHMOD`。不要下载自动生成的 `Source code (zip)` 作为免安装版。
+
+分享版已自带 Python 与 Frida，**无需安装 Python，也无需运行 Setup.cmd**。正常启动游戏到主菜单后，双击解压目录中的 **`TFHMOD.exe`**；看到 `Ready (v2.1.0)` 后，进入离线模式，玩家 1 选择 Arizona 即可。保留同目录的 **`_internal` 文件夹**，不要只复制 exe，也不要在 ZIP 内运行。无需放进游戏目录或与游戏同盘。
+
+随包附有 `使用说明.txt`、第三方许可证和校验文件；详细限制见下文。停止工具后重启游戏可清除本次内存改动。本程序未签名，可能触发安全软件提示；不要关闭安全软件或绕过组织策略。
+
+**2.1.0 修复了训练模式不替换的问题**：允许本地对局类型 `0`，以及类型 `10` 且训练标志为 `1` 的流程；不再采用“几乎所有类型均放行”的判断。类型 `1`、`11` 等其他类型仍拒绝替换。此修复已有真实日志依据和模拟回归测试，分享版仍需不同电脑验证。
+
+以下安装 Python 的步骤仅面向**源码版/开发者**，使用 Release 分享版可以跳过。
+
 在 **Them’s Fightin’ Herds** 的离线模式中，玩家 1 选择 **Arizona**，进入场地后加载 **Huggles（大熊，内部资源名 `bscout`）**。
 
 这是实验性的 Windows 内存工具，不是角色资源替换包，不会修改游戏目录中的文件。选角头像、名称和预览仍是 Arizona；真正替换发生在战斗资源加载前。
@@ -16,7 +28,7 @@
 
 测试记录来自同一台 Windows 电脑、同一个游戏构建；不代表全平台或所有版本兼容。基础角色加载、操控和招式已由作者验证，全部招式、回合结算、再战、训练录像等功能并未逐项穷尽测试。大熊是隐藏 Boss，可能缺少普通角色的部分功能。
 
-## 环境要求
+## 环境要求（源码版）
 
 - Windows 64 位，Steam 版 Them’s Fightin’ Herds。
 - Python 3.11 或更高版本，**64 位**。可以从 [Python 官网](https://www.python.org/downloads/windows/)安装；安装后确保 `py -3` 或 `python` 能运行。
@@ -30,7 +42,7 @@ SHA256: 03E20EECE23F39FB1012061A5A7FF92F4B63DA23EB8EB641CF6EE379CBCE373D
 
 启动器自动从正在运行的游戏读取安装路径，不需要固定盘符、用户名或 Codex。游戏更新后如果校验失败，请等待重新适配，**不要直接删除校验或把哈希替换成新值**：内部函数位置可能已经改变。
 
-## 首次安装
+## 首次安装（源码版）
 
 1. 在仓库页面选择 **Code → Download ZIP**，右键下载的 ZIP → **全部解压**；也可 `git clone`。工具应放在独立文件夹，位置说明见下方。
 2. 安装上述 64 位 Python。
@@ -72,7 +84,7 @@ D:\TFHMOD\TFHMOD-main\
 ## 每次使用
 
 1. 正常从 Steam 启动游戏，等到主菜单，只开一个游戏实例。
-2. 双击 `Start-Huggles.cmd`，看到 **`Ready (v2)`** 后保留工具窗口。
+2. 源码版双击 `Start-Huggles.cmd`，分享版双击 `TFHMOD.exe`，看到 **`Ready (v2.1.0)`** 后保留工具窗口。
 3. 进入自由训练、本地双人或本地人机对战。
 4. **玩家 1 选择 Arizona**，对手和场地正常选择。进入场地后玩家 1 应为大熊。
 
@@ -91,7 +103,7 @@ D:\TFHMOD\TFHMOD-main\
 
 使用 Frida 连接已有游戏进程，在原生战斗资源加载入口检查对局类型、P1 角色和调用位置，再使用游戏本身的字符串赋值函数，把待加载角色 `cow` 改成 `bscout`。
 
-替换必须同时满足：原生本地对局类型为 `0`、玩家 1 是 `cow`、加载调用来自已验证位置。其他类型全部跳过，不以“非训练”推断“离线”。此外，启动前检查磁盘可执行文件 SHA256，安装钩子前检查关键函数开头字节。不修改 P2、不替换磁盘角色文件、不执行在线房间或管理员命令。
+替换必须同时满足：对局类型为 `0`，或类型为 `10` 且训练标志为 `1`；玩家 1 是 `cow`；加载调用来自已验证位置。其他类型全部跳过，不以“非训练”推断“离线”。此外，启动前检查磁盘可执行文件 SHA256，安装钩子前检查关键函数开头字节。不修改 P2、不替换磁盘角色文件、不执行在线房间或管理员命令。
 
 这些检查针对已测试构建，不是对所有未知游戏版本、第三方 Mod 或安全系统的兼容保证。
 
@@ -116,10 +128,14 @@ D:\TFHMOD\TFHMOD-main\
 - `Start-Huggles.cmd` / `Start-Huggles.ps1`：定位游戏并检查版本。
 - `runner.py`：管理 Frida 会话、进程锁及日志。
 - `training-hook.js`：已实测的角色替换逻辑。
+- `launcher.py`：免安装版入口，自动查找游戏、检查版本。
+- `Build-Release.ps1`：构建包含运行时和许可证的分享版，需要先有源码开发环境。
 - `tests/`：离线模式过滤及钩子行为的模拟测试，不替代游戏内验证。
 - `docs/TECHNICAL.md`：当前构建的适配信息和测试边界。
 
 可选：安装 [Node.js](https://nodejs.org/)后执行 `node --test tests/hook.test.cjs`；Windows 下会话模拟测试执行 `.venv\Scripts\python.exe -m unittest discover -s tests -p "test_*.py"`；语法检查执行 `.venv\Scripts\python.exe -m py_compile runner.py`。
+
+开发者构建：运行 `Build-Release.ps1`，产物位于 `release/`。使用 [PyInstaller one-folder 模式](https://pyinstaller.org/en/stable/usage.html)，不使用 UPX；固定主要构建依赖版本。程序支持 `TFHMOD.exe --self-test`，检查内置依赖但不连接游戏。校验 ZIP：`Get-FileHash .\TFHMOD-v2.1.0-windows-x64.zip -Algorithm SHA256`，与 Release 中 `SHA256SUMS.txt` 比对。
 
 `.cmd` 包装器使用仅对该次 PowerShell 进程生效的执行策略参数，不修改系统持久执行策略。如电脑受组织策略管理，请遵循管理员要求，不要绕过组织限制。
 
