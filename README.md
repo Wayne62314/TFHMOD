@@ -2,7 +2,7 @@
 
 ## 免安装分享版：推荐普通玩家使用
 
-到 [GitHub Releases](https://github.com/Wayne62314/TFHMOD/releases/latest) 的 **Assets** 下载 **`TFHMOD-v2.1.0-windows-x64.zip`**，完整解压到独立、可写的文件夹，例如 `D:\TFHMOD`。不要下载自动生成的 `Source code (zip)` 作为免安装版。
+到 [GitHub Releases](https://github.com/Wayne62314/TFHMOD/releases) 的 **Assets** 下载 **`TFHMOD-v2.1.0-windows-x64.zip`**，完整解压到独立、可写的文件夹，例如 `D:\TFHMOD`。不要下载自动生成的 `Source code (zip)` 作为免安装版。
 
 分享版已自带 Python 与 Frida，**无需安装 Python，也无需运行 Setup.cmd**。正常启动游戏到主菜单后，双击解压目录中的 **`TFHMOD.exe`**；看到 `Ready (v2.1.0)` 后，进入离线模式，玩家 1 选择 Arizona 即可。保留同目录的 **`_internal` 文件夹**，不要只复制 exe，也不要在 ZIP 内运行。无需放进游戏目录或与游戏同盘。
 
