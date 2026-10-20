@@ -1,0 +1,21 @@
+TFHMOD Windows portable distribution
+
+This package contains unmodified third-party runtime components:
+
+- CPython 3.12.14: Python Software Foundation License and included notices.
+  See licenses/Python-LICENSE.txt and https://www.python.org/.
+- Frida 17.24.3: wxWindows Library Licence 3.1 (LGPL with exception).
+  See licenses/Frida-COPYING and https://frida.re/.
+- PyInstaller 6.22.3 bootloader: GPL with an exception permitting bundled
+  applications; see licenses/PyInstaller-COPYING.txt and https://pyinstaller.org/.
+
+Additional binary/runtime dependency notices supplied by these distributions
+are collected under licenses/. Third-party components retain their own licenses.
+OpenSSL 3.x is distributed under Apache License 2.0; see Runtime-dependencies.
+libffi is distributed under the MIT license; see Runtime-dependencies.
+Microsoft runtime DLLs are distributed subject to the restrictions in the
+Python distribution's included license notices. They must not be used on
+non-Microsoft platforms or in malicious/deceptive software, and their notices
+must be preserved. No endorsement by Microsoft or other vendors is implied.
+No game executable, game assets or extracted game files are distributed.
+TFHMOD is an unofficial experimental tool, not affiliated with the game creators.
