@@ -1,45 +1,25 @@
-# TFHMOD bilingual offline UI
+# TFHMOD UI 2.5.0 experimental
 
-[中文技术说明](README.md) · [English usage guide](USAGE.en.txt) · [中文使用说明](USAGE.zh-CN.txt)
+[中文](README.md) · [English guide](USAGE.en.txt) · [中文指南](USAGE.zh-CN.txt)
 
-Version: **2.4.2-ui-bilingual1**. Experimental Windows x64 tool for Them's Fightin' Herds.
+Portable bilingual Windows x64 UI. [Download v2.5.0 experimental](https://github.com/Wayne62314/TFHMOD/releases/tag/v2.5.0-experimental).
+Extract the entire ZIP outside the game folder; keep _internal beside TFHMOD.exe. No Python installation or Setup.cmd needed.
 
-## Download and run
+## New experiments
 
-Download the portable ZIP from [v2.4.2 experimental](https://github.com/Wayne62314/TFHMOD/releases/tag/v2.4.2-experimental), not GitHub's automatic Source code archive. Extract everything to a separate writable folder such as `D:\TFHMOD-UI-242`. Keep `_internal` beside `TFHMOD.exe`. **No installed Python or Setup.cmd required.**
+- Paprika: free-training P1 Paprika, F6 toggles the story's Flag27. Standalone test user-confirmed; actual effects unclear. No foreground attack mappings or full Boss claim.
+- Velvet: free-training P1 Velvet, F6 tornado, then F7/F8/F9 icicles from Boss_Wind_Idle. Standalone test user-confirmed; UI integration still needs gameplay regression. Y stops calls, NOT reliable tornado cleanup. Restart after use.
+- Tianhuo normal Fred: F9 summons, Y cleanup; P2 ordinary Oleander REQUIRED. 600-update lifetime, 60-update cooldown. UI repeated summoning remains experimental.
+- Supernova remains unavailable/disabled. No level-two effects or meter cost.
 
-Close older tools and completely restart the game. Start the game to its main menu, run the EXE, click **English**, select options, then **Connect to game**. Re-enter character select and load a new match. The language button is display-only and supports switching back to Chinese, including existing displayed logs. The Usage Guide button opens the selected-language guide.
+Existing Huggles and Oleander options remain. Only investigated offline flows are allowed; Paprika/Velvet are narrowed to ordinary free training. Read the full guide before use.
 
-## Features and controls
+## Architecture and build
 
-- P1 Arizona → Huggles; character-select artwork may remain Arizona.
-- P1 Oleander → ordinary flag27 enhancement.
-- Experimental phase-3 Oleander: manual flight, homing sparks, Fred and vortex. Not the story AI or a complete boss recreation.
+gui.py serializes connection work on a worker. i18n.py is display-only. training-hook.js guards offline loads; phase3-controller.js and phase3-native.js handle Oleander; tian-summons.js controls normal Fred; boss-extras.js ports the tested Paprika/Velvet manual input experiment with generation guards.
+No game assets, executables, saves or Lua files are modified/distributed.
 
-| Key | Action |
-| --- | --- |
-| O / WASD | Toggle flight / bounded movement |
-| P | Homing spark after startup |
-| I | Queue one Fred summon; wait for his entrance |
-| J / K | Left/right attacks |
-| Shift / Ctrl + J/K | Strong / combination attacks; modifiers can be combined |
-| L, then L again | Vortex charge, then request release |
-| Y | Cancel, clean up Fred, restore control |
-| U | Game pause; not read by this tool |
-
-Only investigated offline free-training, local CPU and local two-player flows are allowed. P2 is not intentionally modified. Restart the game before online play. Do not bypass executable hash or native signature validation.
-
-## Verification and known issues
-
-The 2.4.1 repair addresses dropped I presses, startup frame-90 overwrite, vortex recovery, repeated-summon latch/timer and unbounded cleanup retries. Those fixes pass simulated regressions but still need in-game confirmation. The reported temporary opponent/Arizona appearance has not been reproduced or confirmed fixed. This release changes UI language/documentation, not gameplay behavior from 2.4.1.
-
-Start testing in free training: O → I → Fred → J/K → L → L → recovery → P → Y → O → I. Repeat three times before testing rounds/rematches. Incomplete recovery requires a game restart.
-
-## Source and build
-
-`gui.py` serializes connection work on a worker thread; `i18n.py` handles presentation only. `training-hook.js` handles the investigated offline loads; `phase3-controller.js` holds deterministic gameplay control; `phase3-native.js` bridges guarded native operations and generation-scoped memory validation. No game assets, save files or executable are bundled.
-
-From the repository root, using Python 3.12 on Windows:
+From the repository root (Windows, Python 3.12):
 
 ```powershell
 py -3.12 -m venv .venv
@@ -50,6 +30,6 @@ node --test ui/tests/*.test.cjs
 .\ui\build_ui.ps1 -PythonExe .\.venv\Scripts\python.exe
 ```
 
-Build output is in `ui/dist/TFHMOD`; the portable ZIP and SHA256 list are created in `ui/`. Node is only used for development tests. Source users can install `requirements.txt` and run `gui.py`; portable users do not need these steps.
-
-Logs are stored locally beside the EXE and are never uploaded automatically. Include version, mode, both characters and last keys in a report; inspect logs before sharing. Preserve [third-party notices](THIRD_PARTY_NOTICES.txt) and included licenses when redistributing.
+Output: ui/dist-250/TFHMOD, ui/TFHMOD-UI-2.5.0-experimental-windows-x64.zip, ui/SHA256SUMS.txt.
+Source and licenses are included in the ZIP. See [third-party notices](THIRD_PARTY_NOTICES.txt).
+Tests do not replace gameplay verification. Local logs are never automatically uploaded.

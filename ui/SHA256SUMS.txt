@@ -1,1 +1,1 @@
-1b95f04e7eb024b0bf3b61c042a6ac98912c00b7f1b04eb064ba792f9c281a18  TFHMOD-UI-2.4.2-bilingual1-windows-x64.zip
+f0796a1000dd48d450baa478e7598272218b091a7a93ca83feaf3efb2670a389  TFHMOD-UI-2.5.0-experimental-windows-x64.zip

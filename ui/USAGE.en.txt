@@ -1,85 +1,73 @@
-TFHMOD UI 2.4.2-ui-bilingual1 — Windows x64 EXPERIMENTAL
+TFHMOD UI 2.5.0-experimental · Windows x64 · OFFLINE P1 ONLY
 
-OFFLINE ONLY. Player 1 only. This is an unofficial tool, not a complete recreation
-of the story boss. Fred/vortex recovery changes still need in-game verification.
-
-DOWNLOAD AND EXTRACT
-Download TFHMOD-UI-2.4.2-bilingual1-windows-x64.zip from:
-https://github.com/Wayne62314/TFHMOD/releases/tag/v2.4.2-experimental
-The automatic GitHub Source code archives are not the portable application.
-Extract the ENTIRE ZIP into a new writable folder, such as D:\TFHMOD-UI-242.
-It does not belong in the game directory. Keep _internal beside TFHMOD.exe.
-Python, Frida and Tcl/Tk are bundled. No Python installation or Setup.cmd needed.
-Do not mix files from different versions. Close all old TFHMOD tools first.
+INSTALL
+Download TFHMOD-UI-2.5.0-experimental-windows-x64.zip from the Assets at
+https://github.com/Wayne62314/TFHMOD/releases/tag/v2.5.0-experimental
+GitHub's automatic Source code archives are not the portable app.
+Extract the ENTIRE ZIP to a NEW writable folder, e.g. D:\TFHMOD-UI-250, outside the game.
+Keep _internal beside TFHMOD.exe. Python/Frida/Tcl/Tk are bundled; no Setup.cmd needed.
+Close older tools and restart the game. Do not mix version files.
 
 START
-1. Completely restart the game, especially after a red/stuck Oleander or a cleanup
-   warning. Do not attach to an already-corrupted match as a recovery shortcut.
-2. Start the game from Steam and wait at the main menu. Run TFHMOD.exe.
-3. Click English at the upper right for English, or 中文 to switch back.
-   This translates the interface and displayed history without changing options.
-   Click Usage Guide to open this file in the selected language.
-4. Select your options, then Connect to game. Return to character select and enter
-   a NEW match after connecting; an already-loaded match is not automatically armed.
+Start the Steam game to its main menu, run TFHMOD.exe, click English, select options
+and Connect to game. Return to character select and enter a NEW match.
+New experiments default OFF. Enabling Paprika/Velvet arms keys, not automatic Boss mode.
+Focus the game window, release and press hotkeys. U remains the game's pause key.
 
-OPTIONS
-- Huggles: P1 selects Arizona; the match loads Huggles. Character-select artwork
-  may remain Arizona. P2 is not replaced.
-- Enhanced Oleander: P1 selects Oleander; enables flag27 enhancement.
-- Phase 3 Oleander: P1 selects Oleander; includes flag27 plus manual flight,
-  homing sparks, Fred and vortex. This is NOT the original scripted story AI.
+FEATURES / CHARACTER / SCOPE
+- Huggles: P1 Arizona loads Huggles; select artwork may remain Arizona.
+- Enhanced Oleander: P1 Oleander, Flag27 enhancement.
+- Phase-3 Oleander: P1 Oleander, manual flight, homing sparks, Boss Fred and vortex.
+  Not the original scripted boss AI. These existing features allow investigated
+  free training / local CPU / local two-player flows, not every offline mode.
+- Tianhuo normal Fred experiment: P1 Tianhuo, P2 MUST be ORDINARY Oleander to load
+  Uni/Fred normally. F9 summons; Y cleans up. Automatic cleanup after 600 game
+  updates (~10 seconds), cooldown 60 updates (~1 second). Existing Fred blocks
+  duplicates. This is not the phase-3 I/J/K/L controller; not all Oleander commands
+  are ported. Independent resource preloading is not implemented; arbitrary P2
+  is NOT supported.
+- Paprika Boss experiment: FREE TRAINING ONLY, P1 Paprika, any P2.
+  F6 while idle toggles Flag27. Story code uses this flag for Boss mode.
+  The user confirmed the standalone test runs, but actual enhancement effects
+  remain unclear. No claim of complete Boss moves, increased damage or full unlock.
+  FG_Attack_Leap/Teleport foreground attacks are NOT mapped.
+- Velvet Boss experiment: FREE TRAINING ONLY, P1 Velvet, any P2.
+  F6 while idle requests Boss_Install. Once in Boss_Wind_Idle, F7/F8/F9 request
+  light/medium/heavy Boss icicles. Wait for tornado idle before each attack.
+  Story wind push, positioning and the full behavior tree are NOT ported.
+  The standalone test was user-confirmed; integrated UI gameplay regression remains.
+  Y stops Paprika/Velvet experiments and unchecks them. It does NOT guarantee
+  tornado cleanup. QUIT AND RESTART THE GAME AFTER USING VELVET'S TORNADO.
+- Baihe Supernova: the isolated orb exits on its first update. NOT implemented
+  successfully; the UI option is DISABLED. No orbs, presentation, damage or two-bar cost.
 
-KEYS (game window must be focused)
-O                 Enter flight; O again exits and requests cleanup.
-W/A/S/D           Move in bounded low-altitude flight.
-P                 Homing spark after startup (about 1.5 seconds).
-I                 Queue ONE Fred summon until startup/cooldown/action ends.
-                  Request expires after about 5 seconds of game updates; Y,
-                  leaving flight, changing scenes or losing focus cancels it.
-J / K             Fred left / right attack; wait for his entrance/current attack.
-Shift + J / K     Strong attacks.
-Ctrl + J / K      Combination attacks.
-Ctrl+Shift+J / K  Strong combination attacks.
-L                 Start vortex after Fred appears. Press L again after charging
-                  at least half a second to request release.
-Y                 Cancel, clean up Fred and restore ordinary control/position.
-U                 Reserved for the game's pause function; the tool does not read U.
+PHASE-3 OLEANDER KEYS (different from normal Fred)
+O: toggle flight. WASD: bounded low-altitude movement. P: spark after ~1.5s startup.
+I: queue one Boss Fred summon. J/K: left/right attacks. Shift: strong, Ctrl:
+combination; modifiers can be combined. L: vortex charge; L again after at least
+half a second requests release. Wait for recovery before the next action.
+Y: cancel, clean up Fred and restore control. U: game pause.
+Ten collision slots are reserved without replacing the stage. Historical red/stuck
+states and temporary opponent/Arizona visuals are NOT claimed universally fixed.
 
-Allow the vortex end animation to finish before your next move. Do not repeatedly
-press summon during an entrance. Some rejected commands produce English diagnostic
-details. If you use a keyboard for both local players, avoid game-key conflicts.
-No additional phase-3 controller mappings are included.
+TEST
+Test one experiment at a time. Paprika: compare F6 on/off for attacks, teleports,
+hit reactions and knockdown recovery. Velvet: F6 -> tornado idle -> each F7/F8/F9
+-> Y -> RESTART GAME. Tianhuo: required P2 Oleander, F9 -> automatic cleanup ->
+cooldown -> F9; repeat three cycles. Unit/build self-tests are not gameplay proof.
 
-FIRST REGRESSION TEST
-Free training: P1 Oleander -> O -> I -> wait for Fred -> J/K -> L -> L again ->
-wait for recovery -> P -> Y -> O -> I. Repeat at least three cycles.
-Only then test local versus CPU, local two-player, round transitions and rematches.
-If the tool reports incomplete recovery, stop the match and restart the game.
-
-SCOPE AND KNOWN LIMITATIONS
-Supports only investigated ordinary offline free-training / local CPU / local
-two-player flows: fightType=0, or fightType=10 with training=1. Other modes are
-not supported; this is not a promise of compatibility with all offline modes.
-The game executable must match SHA256:
+SAFETY / REPORTING
+Existing features whitelist fightType=0, or fightType=10 with training=1.
+Velvet/Paprika use ONLY the latter. Not all modes, stages, rounds/rematches are verified.
+The tool injects JavaScript, hooks native functions and changes process memory;
+it does not insert Lua or edit game resources/saves on disk. No game assets bundled.
+Crashes and lingering state are possible. Close the tool and restart BEFORE ONLINE PLAY.
+Whitelist checks are not an anti-cheat or online-safety guarantee. Never bypass validation.
+Supported game EXE SHA256:
 03E20EECE23F39FB1012061A5A7FF92F4B63DA23EB8EB641CF6EE379CBCE373D
-Do not bypass version/signature checks after a game update.
+Do not disable security software to run an unsigned program.
+Local logs: logs/ui-hook-<PID>.jsonl beside TFHMOD.exe; never uploaded automatically.
+Report version, mode, characters, keys and log; inspect logs before sharing.
 
-The 2.4.1 recovery fixes are regression-tested in simulation, not yet confirmed
-to resolve every in-game red/stuck state. An opponent temporarily appearing as
-Arizona was reported but not reproduced or confirmed fixed.
-Fred reserves ten additional collision slots without replacing the stage.
-Not all stages, attack effects or lifecycle paths have been verified.
-No story cinematics, original boss AI or new character-select portraits included.
-
-STOP AND REPORT PROBLEMS
-Press Y in the game first, then Disconnect or close the tool. Restart the game to
-fully clear the session. ALWAYS close the tool and restart before online play.
-Offline checks are not an anti-cheat or network-safety guarantee.
-Logs are local at logs\ui-hook-<PID>.jsonl beside TFHMOD.exe; not auto-uploaded.
-Report tool version, mode, both characters, last keys and the log. Review logs
-before sharing. Do not disable security software to run an unsigned executable.
-
-SOURCE / BUILD
-https://github.com/Wayne62314/TFHMOD/tree/main/ui
-The source tree is also included in the portable ZIP. See README.en.md.
-No game binaries, resources or save files are distributed or modified on disk.
+SOURCE: https://github.com/Wayne62314/TFHMOD
+Included source/ contains code/tests; retain licenses and THIRD_PARTY_NOTICES.txt.

@@ -7,7 +7,7 @@ import sys
 import zipfile
 
 root = Path(__file__).resolve().parent
-bundle = root / 'dist' / 'TFHMOD'
+bundle = root / 'dist-250' / 'TFHMOD'
 for name in ['README.md', 'README.en.md', 'USAGE.en.txt', 'USAGE.zh-CN.txt', 'THIRD_PARTY_NOTICES.txt']:
     shutil.copy2(root / name, bundle / name)
 licenses = bundle / 'licenses'
@@ -25,12 +25,12 @@ for package in ['frida','pyinstaller']:
                 shutil.copy2(src,dst)
 source = bundle / 'source'
 source.mkdir(exist_ok=True)
-for name in ['gui.py','i18n.py','launcher.py','training-hook.js','phase3-controller.js','phase3-native.js','build_ui.ps1','package_ui.py','requirements.txt','requirements-build.txt','README.md','README.en.md','USAGE.en.txt','USAGE.zh-CN.txt','THIRD_PARTY_NOTICES.txt']:
+for name in ['gui.py','i18n.py','launcher.py','training-hook.js','phase3-controller.js','phase3-native.js','tian-summons.js','boss-extras.js','build_ui.ps1','package_ui.py','requirements.txt','requirements-build.txt','README.md','README.en.md','USAGE.en.txt','USAGE.zh-CN.txt','THIRD_PARTY_NOTICES.txt']:
     shutil.copy2(root / name, source / name)
 shutil.copytree(root / 'tests',source / 'tests',dirs_exist_ok=True,
                 ignore=shutil.ignore_patterns('__pycache__'))
 shutil.copytree(root / 'third_party',source / 'third_party',dirs_exist_ok=True)
-archive = root / 'TFHMOD-UI-2.4.2-bilingual1-windows-x64.zip'
+archive = root / 'TFHMOD-UI-2.5.0-experimental-windows-x64.zip'
 with zipfile.ZipFile(archive,'w',zipfile.ZIP_DEFLATED,compresslevel=6) as target:
     for item in sorted(bundle.rglob('*')):
         if item.is_file():

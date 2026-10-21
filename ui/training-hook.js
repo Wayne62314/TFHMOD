@@ -6,13 +6,17 @@ rpc.exports = {
     if (!value || typeof value.bear !== 'boolean' || typeof value.boss !== 'boolean')
       throw new Error('Expected boolean bear and boss options');
     if(value.phase3!==undefined && typeof value.phase3!=='boolean')throw new Error('Expected boolean phase3');
-    options = {bear:value.bear, boss:value.boss, phase3:value.phase3===true};
+    for(const name of ['tianFred','tianNova','papBoss','velvetBoss'])if(value[name]!==undefined&&typeof value[name]!=='boolean')throw Error('Expected boolean '+name);
+    if(value.tianNova)throw Error('Supernova is pending validation and cannot be enabled');
+    options = {bear:value.bear, boss:value.boss, phase3:value.phase3===true,tianFred:value.tianFred===true,tianNova:false,papBoss:value.papBoss===true,velvetBoss:value.velvetBoss===true};
     phase3.configure(options);
+    tianSummons.configure(options);
+    bossExtras.configure(options);
     send({event:'configured', ...options});
     return {...options};
   },
-  shutdown(){return phase3.shutdown();},
-  diagnostics(){return phase3.diagnostics();}
+  shutdown(){const a=phase3.shutdown(),b=tianSummons.shutdown(),c=bossExtras.shutdown();return{pending:a.pending||b.pending||c.pending,pendingModules:[...(a.pending?['phase3']:[]),...(b.pending?['tian']:[]),...(c.pending?['bossExtras']:[])]};},
+  diagnostics(){return{...phase3.diagnostics(),tianSummons:tianSummons.diagnostics()};}
 };
 function shouldReplace(fightType, training, name, callerRva) {
   // 0: local versus/CPU; 10 with training=1: observed native training flow.
@@ -46,7 +50,15 @@ flagSignature.forEach((b,i) => { if (base.add(0x1780f40+i).readU8() !== b)
   throw new Error('Unsupported flag function; no hook installed'); });
 const resets = new Map();
 const phase3=createNativePhase3(base);
+const tianSummons=typeof createTianhuoSummons==='function'?createTianhuoSummons(base):{
+ configure(value){if(value.tianFred)throw Error('Tianhuo summon adapter missing');},beforeReset(){},shutdown(){return{pending:false};},diagnostics(){return{};}
+};
+const bossExtras=typeof createBossExtras==='function'?createBossExtras(base):{
+ configure(value){if(value.papBoss||value.velvetBoss)throw Error('Boss extras module missing');},beforeReset(){},shutdown(){return{pending:false};}
+};
 phase3.configure(options);
+tianSummons.configure(options);
+bossExtras.configure(options);
 function offlineMode(scene) {
   const mode = scene.add(0x2028).readPointer();
   if (mode.isNull()) return false;
@@ -75,6 +87,8 @@ function applyBoss(scene) {
 }
 Interceptor.attach(base.add(0x1773720), {
   onEnter(args) {
+    tianSummons.beforeReset(args[0]);
+    bossExtras.beforeReset(args[0]);
     phase3.invalidate();
     this.bossFrame = {scene:args[0], armed:false};
     this.previous = resets.get(this.threadId);
@@ -116,4 +130,4 @@ Interceptor.attach(base.add(0x1772f40), {
   }
 });
 phase3.install();
-send({event:'ready', version:'2.4.2-ui-bilingual1', scope:'OFFLINE P1; optimized flight/spark + Fred/vortex experimental; Y restore; U untouched'});
+send({event:'ready', version:'2.5.0-experimental', scope:'OFFLINE P1; Velvet/Paprika free training only; Tianhuo Fred requires P2 Oleander; Supernova disabled; U untouched'});

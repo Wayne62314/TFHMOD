@@ -14,7 +14,7 @@ from datetime import datetime
 from launcher import find_game
 from i18n import translate
 
-VERSION = '2.4.2-ui-bilingual1'
+VERSION = '2.5.0-experimental'
 
 
 class Backend:
@@ -32,20 +32,30 @@ class Backend:
     def run(self):
         session = script = lock = log = None
         restored = threading.Event()
+        restored_parts, pending_parts = set(), set()
+        restore_token = None
         generation = 0
 
         def cleanup():
-            nonlocal session, script, lock, log, generation
+            nonlocal session, script, lock, log, generation, restore_token, pending_parts
+            restore_token = generation
             generation += 1
             if script is not None:
                 try:
                     restored.clear()
+                    restored_parts.clear()
+                    pending_parts = set()
                     # Queue native cleanup on the game thread, never invoke movement from RPC.
-                    pending = script.exports_sync.shutdown().get('pending', False)
+                    result = script.exports_sync.shutdown()
+                    pending = result.get('pending', False)
+                    pending_parts = set(result.get('pendingModules', ['phase3'] if pending else []))
+                    if pending_parts.issubset(restored_parts):
+                        restored.set()
                     if pending and not restored.wait(2):
-                        self.emit('log', '未确认飞行清理；请重启游戏，勿继续当前战斗或进入联机。')
+                        self.emit('log', '未确认全部模块清理；请重启游戏，勿继续当前战斗或进入联机。')
                 except Exception:
                     pass
+            restore_token = None
             old, session, script = session, None, None
             if old is not None:
                 try:
@@ -108,7 +118,7 @@ class Backend:
                         token = generation
                         session.on('detached', lambda *args, token=token: self.commands.put(('detached', token)))
                         source = '\n'.join((resources/name).read_text(encoding='utf-8') for name in
-                            ['phase3-controller.js','phase3-native.js','training-hook.js'])
+                            ['phase3-controller.js','phase3-native.js','tian-summons.js','boss-extras.js','training-hook.js'])
                         # Configure before load: no interval with unintended default options.
                         source = source.replace('let options = {bear:true, boss:false, phase3:false};',
                                                 'let options = '+json.dumps(value)+';')
@@ -117,8 +127,12 @@ class Backend:
 
                         def message(msg, data, token=token, handle=log):
                             if token != generation:
-                                if msg.get('payload',{}).get('event') == 'phase3_restored' and msg.get('payload',{}).get('complete', True):
-                                    restored.set()
+                                payload = msg.get('payload',{})
+                                part = {'phase3_restored':'phase3','tian_summons_restored':'tian','boss_extras_restored':'bossExtras'}.get(payload.get('event'))
+                                if token == restore_token and part and payload.get('complete', True):
+                                    restored_parts.add(part)
+                                    if pending_parts and pending_parts.issubset(restored_parts):
+                                        restored.set()
                                 return
                             try:
                                 handle.write(json.dumps(msg, ensure_ascii=False)+'\n')
@@ -161,8 +175,8 @@ class App:
         self.language = 'zh'
         self.history = []
         root.title('TFHMOD · 离线角色工具')
-        root.geometry('780x720')
-        root.minsize(620, 550)
+        root.geometry('820x970')
+        root.minsize(740, 900)
         style = ttk.Style(root)
         if 'vista' in style.theme_names():
             style.theme_use('vista')
@@ -180,12 +194,29 @@ class App:
         self.bear = tk.BooleanVar(root, True)
         self.boss = tk.BooleanVar(root, False)
         self.phase3 = tk.BooleanVar(root, False)
+        self.tian_fred = tk.BooleanVar(root, False)
+        self.tian_nova = tk.BooleanVar(root, False)
+        self.pap_boss = tk.BooleanVar(root, False)
+        self.velvet_boss = tk.BooleanVar(root, False)
         ttk.Checkbutton(box, text='启用大熊：选择 Arizona → Huggles', variable=self.bear,
                         command=self.configure).pack(anchor='w', pady=5)
         ttk.Checkbutton(box, text='普通强化奥莉：选择 Oleander → flag27 强化', variable=self.boss,
                         command=self.configure).pack(anchor='w', pady=5)
         ttk.Checkbutton(box, text='三阶段奥莉：飞行＋追踪弹＋弗雷德＋漩涡（实验）', variable=self.phase3,
                         command=self.configure).pack(anchor='w', pady=5)
+        ttk.Checkbutton(box, text='天火召唤普通 Fred（实验）：F9 召唤，Y 清理', variable=self.tian_fred,
+                        command=self.configure).pack(anchor='w', pady=5)
+        self.nova_button = ttk.Checkbutton(box, text='天火召唤白鹤二气 Supernova（待验证，暂不可用）', variable=self.tian_nova,
+                        state='disabled')
+        self.nova_button.pack(anchor='w', pady=5)
+        ttk.Checkbutton(box, text='Paprika Boss（训练实验）：F6 切换 Flag27，具体效果待确认', variable=self.pap_boss,
+                        command=self.configure).pack(anchor='w', pady=5)
+        ttk.Checkbutton(box, text='Velvet Boss（训练实验）：F6 龙卷风，F7/F8/F9 冰柱', variable=self.velvet_boss,
+                        command=self.configure).pack(anchor='w', pady=5)
+        ttk.Label(frame, text='Paprika / Velvet 目前仅限自由训练、P1 选择原角色，对手任意。\nY 停止这两项；Velvet 龙卷风尚无可靠清理，测试后必须退出并重启游戏。',
+                  wraplength=690).pack(anchor='w', pady=(8,0))
+        ttk.Label(frame, text='普通 Fred 需要 P2 选择普通奥莉；约 10 秒后清理，冷却约 1 秒后可再召唤。\n白鹤二气测试对象首帧退出，尚未修复；本版不包含其演出、伤害或两格气消耗。',
+                  wraplength=690).pack(anchor='w', pady=(8,0))
         ttk.Label(frame, text='三阶段包含 flag27；普通强化可单独保留。仅修改玩家 1。').pack(anchor='w', pady=(10,4))
         ttk.Label(frame, text='重新选角进场后生效。O 飞行，WASD 移动，P 追踪弹，Y 恢复。U 留给暂停。\nI 召唤弗雷德；J/K 左右攻击，Shift 强化、Ctrl 组合；L 漩涡，再按 L 释放。\n追加预留碰撞位，不更换地图。先按 Y 再断开；联机前必须重启游戏。',
                   wraplength=610).pack(anchor='w')
@@ -223,7 +254,8 @@ class App:
         root.after(100, self.poll)
 
     def options(self):
-        return {'bear':self.bear.get(), 'boss':self.boss.get(), 'phase3':self.phase3.get()}
+        return {'bear':self.bear.get(), 'boss':self.boss.get(), 'phase3':self.phase3.get(),
+                'tianFred':self.tian_fred.get(), 'tianNova':False,'papBoss':self.pap_boss.get(),'velvetBoss':self.velvet_boss.get()}
 
     def append(self, text):
         self.history.append((datetime.now().strftime('%H:%M:%S'), text))
@@ -311,7 +343,33 @@ class App:
                 self.append(value)
             elif kind == 'event':
                 event = value.get('event')
-                if event == 'replaced':
+                if event == 'tian_summons_ready':
+                    self.append('天火普通 Fred 已就绪：F9 召唤，Y 清理，可重复召唤。')
+                elif event == 'tian_resource_ready':
+                    self.append('已确认场景中的普通奥莉资源；当前实验需要 P2 选择普通奥莉。')
+                elif event == 'boss_extras_ready':
+                    self.append('训练 Boss 实验已就绪：站稳后 F6；Velvet 龙卷风待机后 F7/F8/F9。')
+                elif event == 'paprika_flag27':
+                    self.append('Paprika Flag27：'+('开' if value.get('enabled') else '关'))
+                elif event == 'velvet_dispatch':
+                    self.append('Velvet 状态请求：'+str(value.get('state')))
+                elif event == 'boss_extras_warning':
+                    self.append('Boss 实验警告：'+str(value.get('message')))
+                elif event == 'boss_extras_refused':
+                    self.append('Boss 实验按键未执行：'+str(value.get('state')))
+                elif event == 'boss_extras_stopped':
+                    self.pap_boss.set(False)
+                    self.velvet_boss.set(False)
+                    self.append('训练 Boss 实验已停止；使用过 Velvet 龙卷风后必须重启游戏。')
+                elif event == 'tian_fred_spawned':
+                    self.append('普通 Fred 已生成并归属天火；天火角色资源已恢复。')
+                elif event == 'tian_fred_cleaned':
+                    self.append('普通 Fred 已清理；松开按键，约 1 秒后可再次按 F9。')
+                elif event in ('tian_error','tian_warning','tian_notice'):
+                    self.append('天火召唤提示：'+str(value.get('message')))
+                elif event == 'tian_summons_restored':
+                    self.append('天火召唤模块已停止；联机前仍须重启游戏。')
+                elif event == 'replaced':
                     self.append('玩家 1：Arizona 已替换为大熊。')
                 elif event == 'boss_applied':
                     self.append('玩家 1：奥莉 flag27 已开启，回读成功。')
@@ -353,7 +411,7 @@ class App:
 
     @staticmethod
     def describe(value):
-        return '大熊：'+('开' if value['bear'] else '关')+' / 普通奥莉：'+('开' if value['boss'] else '关')+' / 三阶段：'+('开' if value.get('phase3') else '关')
+        return '大熊：'+('开' if value['bear'] else '关')+' / 普通奥莉：'+('开' if value['boss'] else '关')+' / 三阶段：'+('开' if value.get('phase3') else '关')+' / 天火 Fred：'+('开' if value.get('tianFred') else '关')
 
 
 def main():
@@ -364,13 +422,19 @@ def main():
         assert 'rpc.exports' in (resources / 'training-hook.js').read_text(encoding='utf-8')
         assert 'createPhase3Controller' in (resources / 'phase3-controller.js').read_text(encoding='utf-8')
         assert 'createNativePhase3' in (resources / 'phase3-native.js').read_text(encoding='utf-8')
+        assert 'createTianhuoSummons' in (resources / 'tian-summons.js').read_text(encoding='utf-8')
+        assert 'createBossExtras' in (resources / 'boss-extras.js').read_text(encoding='utf-8')
         root = tk.Tk()
         root.withdraw()
         app = App(root)
-        assert app.options() == {'bear':True, 'boss':False, 'phase3':False}
+        assert app.options() == {'bear':True, 'boss':False, 'phase3':False,'tianFred':False,'tianNova':False,'papBoss':False,'velvetBoss':False}
         app.boss.set(True)
         app.phase3.set(True)
-        assert app.options() == {'bear':True,'boss':True,'phase3':True}
+        assert app.options() == {'bear':True,'boss':True,'phase3':True,'tianFred':False,'tianNova':False,'papBoss':False,'velvetBoss':False}
+        assert 'disabled' in app.nova_button.state()
+        app.pap_boss.set(True)
+        app.velvet_boss.set(True)
+        assert app.options()['papBoss'] and app.options()['velvetBoss']
         app.configure()
         root.update()
         before = app.options()

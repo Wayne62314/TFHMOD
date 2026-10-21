@@ -87,6 +87,32 @@ class Tests(unittest.TestCase):
             backend.thread.join(10)
             self.assertFalse(backend.thread.is_alive())
 
+    def test_cleanup_waits_for_both_modules_even_if_callbacks_arrive_during_rpc(self):
+        events = queue.Queue()
+        session = Session()
+        backend = Backend(events, finder=lambda:{'pid':2147483002,'base':'0x10000000'},
+                          attach=lambda pid:session)
+        backend.start()
+        try:
+            backend.commands.put(('connect', {'bear':False,'boss':False,'tianFred':True}))
+            self.event(events, 'connected')
+            def shutdown():
+                for name in ['tian_summons_restored','phase3_restored','boss_extras_restored']:
+                    session.script.message({'type':'send','payload':{'event':name,'complete':True}},None)
+                return {'pending':True,'pendingModules':['phase3','tian','bossExtras']}
+            session.script.shutdown = shutdown
+            backend.commands.put(('disconnect',None))
+            self.event(events,'disconnected')
+            self.assertTrue(session.closed)
+            remaining = []
+            while not events.empty():
+                remaining.append(events.get_nowait())
+            self.assertFalse(any(kind == 'log' and '未确认' in str(value) for kind,value in remaining))
+        finally:
+            backend.commands.put(('quit',None))
+            backend.thread.join(10)
+            self.assertFalse(backend.thread.is_alive())
+
 
 if __name__ == '__main__':
     unittest.main()
