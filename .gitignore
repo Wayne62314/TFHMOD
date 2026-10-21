@@ -17,6 +17,8 @@ build/
 dist/
 dist-250/
 build-250/
+dist-251/
+build-251/
 ui/SHA256SUMS-tian-preview1.txt
 dist-tian-preview1/
 build-tian-preview1/

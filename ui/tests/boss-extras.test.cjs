@@ -1,7 +1,7 @@
 const test=require('node:test'),assert=require('node:assert/strict');
 const {bossExtrasAllowed:allowed,bossExtrasAction:action}=require('../boss-extras.js');
-test('New bosses only allow ordinary training and matching P1 resource',()=>{
- for(let kind=0;kind<32;kind++)for(const training of [0,1])assert.equal(allowed(kind,training,'velvet','Velvet',1),kind===10&&training===1);
+test('Bosses allow local CPU/local versus and free training with matching P1 resource',()=>{
+ for(let kind=0;kind<32;kind++)for(const training of [0,1])assert.equal(allowed(kind,training,'velvet','Velvet',1),kind===0||(kind===10&&training===1));
  for(const [selected,actual,team]of [['paca','Velvet',1],['uni','Uni',1],['velvet','Velvet',2]])assert.equal(allowed(10,1,selected,actual,team),false);
  assert.equal(allowed(10,1,'paca','Paca',1),true);
 });

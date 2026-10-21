@@ -130,4 +130,4 @@ Interceptor.attach(base.add(0x1772f40), {
   }
 });
 phase3.install();
-send({event:'ready', version:'2.5.0-experimental', scope:'OFFLINE P1; Velvet/Paprika free training only; Tianhuo Fred requires P2 Oleander; Supernova disabled; U untouched'});
+send({event:'ready', version:'2.5.1-experimental', scope:'OFFLINE P1; Velvet/Paprika local CPU, local versus and free training; Tianhuo Fred requires P2 Oleander; Supernova disabled; U untouched'});

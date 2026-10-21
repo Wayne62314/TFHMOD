@@ -1,10 +1,10 @@
-TFHMOD UI 2.5.0-experimental · Windows x64 · OFFLINE P1 ONLY
+TFHMOD UI 2.5.1-experimental · Windows x64 · OFFLINE P1 ONLY
 
 INSTALL
-Download TFHMOD-UI-2.5.0-experimental-windows-x64.zip from the Assets at
-https://github.com/Wayne62314/TFHMOD/releases/tag/v2.5.0-experimental
+Download TFHMOD-UI-2.5.1-experimental-windows-x64.zip from the Assets at
+https://github.com/Wayne62314/TFHMOD/releases/tag/v2.5.1-experimental
 GitHub's automatic Source code archives are not the portable app.
-Extract the ENTIRE ZIP to a NEW writable folder, e.g. D:\TFHMOD-UI-250, outside the game.
+Extract the ENTIRE ZIP to a NEW writable folder, e.g. D:\TFHMOD-UI-251, outside the game.
 Keep _internal beside TFHMOD.exe. Python/Frida/Tcl/Tk are bundled; no Setup.cmd needed.
 Close older tools and restart the game. Do not mix version files.
 
@@ -26,12 +26,12 @@ FEATURES / CHARACTER / SCOPE
   duplicates. This is not the phase-3 I/J/K/L controller; not all Oleander commands
   are ported. Independent resource preloading is not implemented; arbitrary P2
   is NOT supported.
-- Paprika Boss experiment: FREE TRAINING ONLY, P1 Paprika, any P2.
+- Paprika Boss experiment: free training / local CPU / local versus, P1 Paprika, any P2.
   F6 while idle toggles Flag27. Story code uses this flag for Boss mode.
   The user confirmed the standalone test runs, but actual enhancement effects
   remain unclear. No claim of complete Boss moves, increased damage or full unlock.
   FG_Attack_Leap/Teleport foreground attacks are NOT mapped.
-- Velvet Boss experiment: FREE TRAINING ONLY, P1 Velvet, any P2.
+- Velvet Boss experiment: free training / local CPU / local versus, P1 Velvet, any P2.
   F6 while idle requests Boss_Install. Once in Boss_Wind_Idle, F7/F8/F9 request
   light/medium/heavy Boss icicles. Wait for tornado idle before each attack.
   Story wind push, positioning and the full behavior tree are NOT ported.
@@ -58,7 +58,7 @@ cooldown -> F9; repeat three cycles. Unit/build self-tests are not gameplay proo
 
 SAFETY / REPORTING
 Existing features whitelist fightType=0, or fightType=10 with training=1.
-Velvet/Paprika use ONLY the latter. Not all modes, stages, rounds/rematches are verified.
+Velvet/Paprika now use the same whitelist; P1 only. Newly enabled local matches need gameplay regression. Not all modes, stages, rounds/rematches are verified.
 The tool injects JavaScript, hooks native functions and changes process memory;
 it does not insert Lua or edit game resources/saves on disk. No game assets bundled.
 Crashes and lingering state are possible. Close the tool and restart BEFORE ONLINE PLAY.

@@ -38,7 +38,7 @@ test('Boss adapter off has no update hook; Pap toggle preserves unrelated bits a
  assert.equal(f.actor.add(0x590).readU32(),0x64);assert.equal(f.hooks[0].detached,true);assert.equal(f.events.find(e=>e.event==='boss_extras_restored').complete,true);
 });
 test('Network/wrong team, lost focus, busy states and changed generation never toggle stale flags',()=>{
- for(const change of [f=>f.put(f.scene,0x9e4,0),f=>f.put(f.actor,0x88,2),f=>f.setFocused(false),f=>f.string(f.state.add(0x10),'Hit')]){
+ for(const change of [f=>f.put(f.scene,0x9e4,1),f=>f.put(f.scene,0x9e4,11),f=>f.put(f.mode,0x1e8,0),f=>f.put(f.actor,0x88,2),f=>f.setFocused(false),f=>f.string(f.state.add(0x10),'Hit')]){
   const f=fixture();f.api.configure({papBoss:true});change(f);f.key(0x75);assert.equal(f.actor.add(0x590).readU32(),0x24);
  }
  const f=fixture();f.api.configure({papBoss:true});f.key(0x75);const flagWrites=()=>f.writes.filter(([address])=>address===f.actor.n+0x590).length,before=flagWrites();f.put(f.actor,0x1270,1002);f.api.shutdown();f.tick();assert.equal(flagWrites(),before);assert.equal(f.events.find(e=>e.event==='boss_extras_restored').complete,false);
@@ -48,4 +48,26 @@ test('Velvet only dispatches at allowed states and never claims tornado restored
  f.key(0x75);assert.equal(f.events.filter(e=>e.event==='native_enqueue').length,1);
  f.string(f.state.add(0x10),'Boss_Wind_Idle');f.key(0x76);assert.equal(f.events.filter(e=>e.event==='native_enqueue').length,2);
  f.key(0x59);assert.equal(f.events.find(e=>e.event==='boss_extras_restored').complete,false);assert.equal(f.events.some(e=>e.event==='boss_extras_warning'),true);
+});
+test('Local CPU and two-player flow enables both bosses with either training flag value',()=>{
+ for(const training of [0,1])for(const character of ['paca','velvet']){
+  const f=fixture(character);f.put(f.scene,0x9e4,0);f.put(f.mode,0x1e8,training);
+  f.api.configure({papBoss:true,velvetBoss:true});f.key(0x75);
+  assert.equal(f.events.some(e=>e.event==='boss_extras_ready'&&e.offlineOnly&&!e.trainingOnly),true);
+  if(character==='paca')assert.equal(f.actor.add(0x590).readU32(),0x08000024);
+  else{
+   assert.equal(f.events.some(e=>e.event==='velvet_dispatch'&&e.state==='Boss_Install'),true);
+   f.string(f.state.add(0x10),'Boss_Wind_Idle');
+   for(const key of [0x76,0x77,0x78])f.key(key);
+   assert.equal(f.events.filter(e=>e.event==='native_enqueue').length,4);
+  }
+ }
+});
+test('Mode transition from local to network blocks all new commands and stale flag restoration',()=>{
+ for(const character of ['paca','velvet']){
+  const f=fixture(character);f.put(f.scene,0x9e4,0);f.api.configure({papBoss:true,velvetBoss:true});f.key(0x75);
+  f.put(f.scene,0x9e4,1);const writes=f.writes.length,queued=f.events.filter(e=>e.event==='native_enqueue').length;
+  f.key(0x75);f.key(0x76);f.api.shutdown();f.tick();
+  assert.equal(f.writes.length,writes);assert.equal(f.events.filter(e=>e.event==='native_enqueue').length,queued);
+ }
 });

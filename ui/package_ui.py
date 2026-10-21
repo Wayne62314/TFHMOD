@@ -7,7 +7,7 @@ import sys
 import zipfile
 
 root = Path(__file__).resolve().parent
-bundle = root / 'dist-250' / 'TFHMOD'
+bundle = root / 'dist-251' / 'TFHMOD'
 for name in ['README.md', 'README.en.md', 'USAGE.en.txt', 'USAGE.zh-CN.txt', 'THIRD_PARTY_NOTICES.txt']:
     shutil.copy2(root / name, bundle / name)
 licenses = bundle / 'licenses'
@@ -30,7 +30,7 @@ for name in ['gui.py','i18n.py','launcher.py','training-hook.js','phase3-control
 shutil.copytree(root / 'tests',source / 'tests',dirs_exist_ok=True,
                 ignore=shutil.ignore_patterns('__pycache__'))
 shutil.copytree(root / 'third_party',source / 'third_party',dirs_exist_ok=True)
-archive = root / 'TFHMOD-UI-2.5.0-experimental-windows-x64.zip'
+archive = root / 'TFHMOD-UI-2.5.1-experimental-windows-x64.zip'
 with zipfile.ZipFile(archive,'w',zipfile.ZIP_DEFLATED,compresslevel=6) as target:
     for item in sorted(bundle.rglob('*')):
         if item.is_file():

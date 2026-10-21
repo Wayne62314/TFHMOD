@@ -1,5 +1,6 @@
 'use strict';
-function bossExtrasAllowed(kind,training,selected,actual,team){return kind===10&&training===1&&['paca','velvet'].includes(selected)&&actual.toLowerCase()===selected&&team===1;}
+function bossExtrasOffline(kind,training){return kind===0||(kind===10&&training===1);}
+function bossExtrasAllowed(kind,training,selected,actual,team){return bossExtrasOffline(kind,training)&&['paca','velvet'].includes(selected)&&actual.toLowerCase()===selected&&team===1;}
 function bossExtrasAction(character,state,key){
  if(character==='paca'&&key==='F6'&&['Stand','Stand_Flourish'].includes(state))return 'toggle27';
  if(character==='velvet'){
@@ -14,7 +15,7 @@ function createBossExtras(base){
  function snap(){
   const scene=base.add(0x2b0d1e8).readPointer();if(scene.isNull())return null;
   const mode=scene.add(0x2028).readPointer();if(mode.isNull())return null;
-  const kind=scene.add(0x9e4).readU32(),training=mode.add(0x1e8).readU8();if(kind!==10||training!==1)return null;
+  const kind=scene.add(0x9e4).readU32(),training=mode.add(0x1e8).readU8();if(!bossExtrasOffline(kind,training))return null;
   const selected=str(scene.add(0x20d0));if(!['paca','velvet'].includes(selected))return null;
   const slot=scene.add(0xaa8).readS32();if(slot<0||slot>2)return null;
   const actor=scene.add(0xae0+slot*8).readPointer();if(actor.isNull())return null;
@@ -67,7 +68,7 @@ function createBossExtras(base){
    s=snap();if(pending){stop(s);return;}
    const enabled=s&&(s.selected==='paca'?options.papBoss:options.velvetBoss);
    if(!enabled){if(scope)release(s);resetKeys();return;}
-   if(!same(s)){release(s);validate(s);scope=s;resetKeys();send({event:'boss_extras_ready',character:s.selected,trainingOnly:true});}
+   if(!same(s)){release(s);validate(s);scope=s;resetKeys();send({event:'boss_extras_ready',character:s.selected,trainingOnly:false,offlineOnly:true});}
    const window=native.fg();let focused=false;if(!window.isNull()){native.wp(window,native.pid);focused=native.pid.readU32()===Process.id;}
    if(!focused){resetKeys();return;}
    const edges=[];for(const k of keys){const pressed=(native.key(k.vk)&0x8000)!==0;if(!pressed)k.released=true;if(pressed&&!k.down&&k.released)edges.push(k.name);k.down=pressed;}

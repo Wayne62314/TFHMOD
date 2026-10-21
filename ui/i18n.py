@@ -1,14 +1,14 @@
 """Display-only translations. Switching languages never changes game options."""
 TEXT = {
  '未确认全部模块清理；请重启游戏，勿继续当前战斗或进入联机。': 'Complete cleanup of all modules was not confirmed. Restart the game; do not continue the match or go online.',
- 'Paprika Boss（训练实验）：F6 切换 Flag27，具体效果待确认': 'Paprika Boss (training experiment): F6 toggles Flag27; effects unconfirmed',
- 'Velvet Boss（训练实验）：F6 龙卷风，F7/F8/F9 冰柱': 'Velvet Boss (training experiment): F6 tornado; F7/F8/F9 icicles',
- 'Paprika / Velvet 目前仅限自由训练、P1 选择原角色，对手任意。\nY 停止这两项；Velvet 龙卷风尚无可靠清理，测试后必须退出并重启游戏。':
- 'Paprika / Velvet: free training only. P1 selects the original character; any P2.\nY stops these experiments. Velvet tornado cleanup is not reliable; quit and restart after testing.',
- '训练 Boss 实验已就绪：站稳后 F6；Velvet 龙卷风待机后 F7/F8/F9。': 'Training Boss experiment ready: F6 while idle; Velvet F7/F8/F9 from tornado idle.',
+ 'Paprika Boss（离线实验）：F6 切换 Flag27，具体效果待确认': 'Paprika Boss (offline experiment): F6 toggles Flag27; effects unconfirmed',
+ 'Velvet Boss（离线实验）：F6 龙卷风，F7/F8/F9 冰柱': 'Velvet Boss (offline experiment): F6 tornado; F7/F8/F9 icicles',
+ 'Paprika / Velvet 支持自由训练、本地人机和双人；P1 选择原角色，对手任意。\nY 停止这两项；Velvet 龙卷风尚无可靠清理，测试后必须退出并重启游戏。':
+ 'Paprika / Velvet: free training, local CPU and local versus. P1 selects the original character; any P2.\nY stops these experiments. Velvet tornado cleanup is not reliable; quit and restart after testing.',
+ '离线 Boss 实验已就绪：站稳后 F6；Velvet 龙卷风待机后 F7/F8/F9。': 'Offline Boss experiment ready: F6 while idle; Velvet F7/F8/F9 from tornado idle.',
  'Paprika Flag27：': 'Paprika Flag27: ', 'Velvet 状态请求：': 'Velvet state request: ',
  'Boss 实验警告：': 'Boss experiment warning: ', 'Boss 实验按键未执行：': 'Boss experiment key skipped: ',
- '训练 Boss 实验已停止；使用过 Velvet 龙卷风后必须重启游戏。': 'Training Boss experiments stopped. Restart the game after using Velvet tornado.',
+ '离线 Boss 实验已停止；使用过 Velvet 龙卷风后必须重启游戏。': 'Offline Boss experiments stopped. Restart the game after using Velvet tornado.',
  '天火召唤普通 Fred（实验）：F9 召唤，Y 清理': 'Tianhuo summons normal Fred (experimental): F9 summon, Y cleanup',
  '天火召唤白鹤二气 Supernova（待验证，暂不可用）': 'Tianhuo summons Baihe Supernova (unverified; unavailable)',
  '普通 Fred 需要 P2 选择普通奥莉；约 10 秒后清理，冷却约 1 秒后可再召唤。\n白鹤二气测试对象首帧退出，尚未修复；本版不包含其演出、伤害或两格气消耗。':

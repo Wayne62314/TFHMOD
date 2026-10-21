@@ -14,7 +14,7 @@ from datetime import datetime
 from launcher import find_game
 from i18n import translate
 
-VERSION = '2.5.0-experimental'
+VERSION = '2.5.1-experimental'
 
 
 class Backend:
@@ -209,11 +209,11 @@ class App:
         self.nova_button = ttk.Checkbutton(box, text='天火召唤白鹤二气 Supernova（待验证，暂不可用）', variable=self.tian_nova,
                         state='disabled')
         self.nova_button.pack(anchor='w', pady=5)
-        ttk.Checkbutton(box, text='Paprika Boss（训练实验）：F6 切换 Flag27，具体效果待确认', variable=self.pap_boss,
+        ttk.Checkbutton(box, text='Paprika Boss（离线实验）：F6 切换 Flag27，具体效果待确认', variable=self.pap_boss,
                         command=self.configure).pack(anchor='w', pady=5)
-        ttk.Checkbutton(box, text='Velvet Boss（训练实验）：F6 龙卷风，F7/F8/F9 冰柱', variable=self.velvet_boss,
+        ttk.Checkbutton(box, text='Velvet Boss（离线实验）：F6 龙卷风，F7/F8/F9 冰柱', variable=self.velvet_boss,
                         command=self.configure).pack(anchor='w', pady=5)
-        ttk.Label(frame, text='Paprika / Velvet 目前仅限自由训练、P1 选择原角色，对手任意。\nY 停止这两项；Velvet 龙卷风尚无可靠清理，测试后必须退出并重启游戏。',
+        ttk.Label(frame, text='Paprika / Velvet 支持自由训练、本地人机和双人；P1 选择原角色，对手任意。\nY 停止这两项；Velvet 龙卷风尚无可靠清理，测试后必须退出并重启游戏。',
                   wraplength=690).pack(anchor='w', pady=(8,0))
         ttk.Label(frame, text='普通 Fred 需要 P2 选择普通奥莉；约 10 秒后清理，冷却约 1 秒后可再召唤。\n白鹤二气测试对象首帧退出，尚未修复；本版不包含其演出、伤害或两格气消耗。',
                   wraplength=690).pack(anchor='w', pady=(8,0))
@@ -348,7 +348,7 @@ class App:
                 elif event == 'tian_resource_ready':
                     self.append('已确认场景中的普通奥莉资源；当前实验需要 P2 选择普通奥莉。')
                 elif event == 'boss_extras_ready':
-                    self.append('训练 Boss 实验已就绪：站稳后 F6；Velvet 龙卷风待机后 F7/F8/F9。')
+                    self.append('离线 Boss 实验已就绪：站稳后 F6；Velvet 龙卷风待机后 F7/F8/F9。')
                 elif event == 'paprika_flag27':
                     self.append('Paprika Flag27：'+('开' if value.get('enabled') else '关'))
                 elif event == 'velvet_dispatch':
@@ -360,7 +360,7 @@ class App:
                 elif event == 'boss_extras_stopped':
                     self.pap_boss.set(False)
                     self.velvet_boss.set(False)
-                    self.append('训练 Boss 实验已停止；使用过 Velvet 龙卷风后必须重启游戏。')
+                    self.append('离线 Boss 实验已停止；使用过 Velvet 龙卷风后必须重启游戏。')
                 elif event == 'tian_fred_spawned':
                     self.append('普通 Fred 已生成并归属天火；天火角色资源已恢复。')
                 elif event == 'tian_fred_cleaned':
