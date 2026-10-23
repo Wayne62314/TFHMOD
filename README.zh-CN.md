@@ -1,6 +1,6 @@
 # TFHMOD — 离线角色工具
 
-[English](README.md) · [下载 UI 实验版](https://github.com/Wayne62314/TFHMOD/releases/tag/v2.5.1-experimental) · [完整中文使用说明](ui/USAGE.zh-CN.txt)
+[English](README.md) · [下载 UI 实验版](https://github.com/Wayne62314/TFHMOD/releases/tag/v2.5.1-experimental) · [完整中文使用说明](ui/USAGE.zh-CN.txt) · [MOD 开发文档](https://github.com/Wayne62314/TFH-Modding-Guide)
 
 Windows x64 中英文界面，提供大熊、普通强化奥莉及包含 Fred/漩涡的三阶段实验功能。
 
@@ -32,5 +32,11 @@ Paprika/Velvet 独立实验已获用户反馈可用；整合 UI 版仍需实机�
 大熊、普通强化和飞行性能优化此前已获用户实测。Fred、漩涡仍是实验功能；2.4.1 的发红/锁招/重复召唤修复通过模拟回归，仍需实际验证。对手短暂变小牛未复现，不宣称已经修复。不是剧情 BOSS 自动 AI 和完整演出的复刻。
 
 2.5.1 新增上述有限实验功能，不代表完整剧情 Boss 移植。本工具不修改游戏资源和存档；不包含游戏文件。恢复未完全确认时请停止当前对局并重启。日志在 EXE 旁 logs，不会自动上传。
+
+## 给 MOD 开发者
+
+完整开发资料已整理到 **[TFH Modding Guide](https://github.com/Wayne62314/TFH-Modding-Guide)**，也提供可直接分享给外国作者的 **[完整英文版](https://github.com/Wayne62314/TFH-Modding-Guide/blob/main/README.en.md)**。14章涵盖引擎与 Lua 分工、资源加载、大熊与 Boss 实验、原生输入、预测隔离、录像与 AI、连段执行、测试和打包，并附来源、术语与安全示例。
+
+这是特定构建的研究记录，不是官方 SDK；文档区分已验证、推测、失败和未知，不承诺完整 Boss 移植或联网支持。
 
 当前源码、测试、构建说明见 [ui/](ui/README.en.md)，详细中文技术说明见 [ui/README.md](ui/README.md)。旧命令行工具说明保留在 [历史文档](docs/legacy-cli-README.md)，不要照旧说明运行 Setup/Start 来启动新版 UI。

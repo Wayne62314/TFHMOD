@@ -1,6 +1,6 @@
 # TFHMOD — Offline Character Tool
 
-[中文说明](README.zh-CN.md) · [Download experimental UI](https://github.com/Wayne62314/TFHMOD/releases/tag/v2.5.1-experimental) · [English usage guide](ui/USAGE.en.txt)
+[中文说明](README.zh-CN.md) · [Download experimental UI](https://github.com/Wayne62314/TFHMOD/releases/tag/v2.5.1-experimental) · [English usage guide](ui/USAGE.en.txt) · [Mod development guide](https://github.com/Wayne62314/TFH-Modding-Guide/blob/main/README.en.md)
 
 An unofficial **Chinese / English Windows x64 UI** for offline Them's Fightin' Herds experiments: Huggles, enhanced Oleander, and experimental manual phase-3 Oleander with Fred and vortex.
 
@@ -55,6 +55,12 @@ Huggles, enhancement and the flight performance optimization were previously tes
 If recovery is incomplete, stop and restart the game. Logs remain local under `logs` beside the EXE; they are not automatically uploaded. Inspect them before sharing.
 
 ## Source, build and older versions
+
+### Developer documentation
+
+Want to make your own TFH mods? Read the **[TFH Modding Guide — full English documentation](https://github.com/Wayne62314/TFH-Modding-Guide/blob/main/README.en.md)** ([中文](https://github.com/Wayne62314/TFH-Modding-Guide)). Its 14 chapters explain the engine/Lua boundary, resource formats and loading, Huggles and boss experiments, native input, prediction isolation, replay/AI research, combo execution, testing and packaging. Sources, a glossary and safe synthetic examples are included.
+
+This is build-specific research, not an official SDK. Tested results, hypotheses, failed experiments and unknowns are explicitly distinguished; it does not promise complete boss ports or online support.
 
 Current UI source, tests and build scripts are in **[ui/](ui/README.en.md)**. Portable releases also include source and runtime license notices. See [third-party notices](ui/THIRD_PARTY_NOTICES.txt).
 
