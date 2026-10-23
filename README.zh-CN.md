@@ -39,4 +39,6 @@ Paprika/Velvet 独立实验已获用户反馈可用；整合 UI 版仍需实机�
 
 这是特定构建的研究记录，不是官方 SDK；文档区分已验证、推测、失败和未知，不承诺完整 Boss 移植或联网支持。
 
+跟着代码做可以看 **[动手教程](https://github.com/Wayne62314/TFH-Modding-Guide/blob/main/tutorials/README.md)**，从加一个教程关开始，继续做连战章节、读取人物和对局属性、隐藏 Boss 加载及观察钩子。[英文动手教程](https://github.com/Wayne62314/TFH-Modding-Guide/blob/main/tutorials/README.en.md) 内容对应。新示例的游戏内待测状态、原生输入片段缺少的适配器都单独标明。
+
 当前源码、测试、构建说明见 [ui/](ui/README.en.md)，详细中文技术说明见 [ui/README.md](ui/README.md)。旧命令行工具说明保留在 [历史文档](docs/legacy-cli-README.md)，不要照旧说明运行 Setup/Start 来启动新版 UI。

@@ -62,6 +62,8 @@ Want to make your own TFH mods? Read the **[TFH Modding Guide — full English d
 
 This is build-specific research, not an official SDK. Tested results, hypotheses, failed experiments and unknowns are explicitly distinguished; it does not promise complete boss ports or online support.
 
+For a code-led starting point, use the **[hands-on tutorials](https://github.com/Wayne62314/TFH-Modding-Guide/blob/main/tutorials/README.en.md)**: add a tutorial lesson, build a battle chapter, inspect fighter/match properties, understand hidden-boss loading and write observation hooks. New teaching samples clearly mark pending in-game validation; native-input integration excerpts identify missing adapters.
+
 Current UI source, tests and build scripts are in **[ui/](ui/README.en.md)**. Portable releases also include source and runtime license notices. See [third-party notices](ui/THIRD_PARTY_NOTICES.txt).
 
 The old root-level command-line tool remains available for reference; its documentation is [archived here](docs/legacy-cli-README.md). Use the current UI release instructions above, not the legacy Setup/Start scripts. Older releases are retained on the [release listing](https://github.com/Wayne62314/TFHMOD/releases).
